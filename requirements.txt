@@ -7,3 +7,4 @@ faiss-cpu
 groq
 langchain-groq
 bs4
+beautifulsoup4
