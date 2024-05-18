@@ -6,3 +6,4 @@ langchain_community
 faiss-cpu
 groq
 langchain-groq
+bs4
