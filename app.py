@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load groq api key
-# GROQ_API_KEY = "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"
 GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
 
 st.title("GROQBoT")
