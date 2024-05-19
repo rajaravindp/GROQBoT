@@ -14,7 +14,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 # Load groq api key
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
+# Add a text input for the user to input the Groq API key
+groq_api_key = st.text_input("Enter your Groq API Key:", type="password")
 
 st.title("GROQBoT")
 
@@ -28,13 +29,12 @@ if website_url:
     if "vectors_initialized" in st.session_state and not st.session_state.vectors_initialized:
         st.session_state.embeddings = OllamaEmbeddings()
         st.session_state.loader = WebBaseLoader(website_url)
-        # st.session_state.loader = WebBaseLoader("https://docs.smith.langchain.com/")
         st.session_state.docs = st.session_state.loader.load()
         st.session_state.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
         st.session_state.final_documents = st.session_state.text_splitter.split_documents(st.session_state.docs[:50])
         st.session_state.vectors = FAISS.from_documents(st.session_state.final_documents, st.session_state.embeddings)
 
-    llm = ChatGroq(groq_api_key= GROQ_API_KEY, model_name="llama3-8b-8192")
+    llm = ChatGroq(groq_api_key= groq_api_key, model_name="mixtral-8x7b-32768")
 
     prompt = ChatPromptTemplate.from_template(
         """
@@ -62,4 +62,7 @@ if website_url:
                 st.write(doc.page_content)
                 st.write("-------------------------")
 else:
-    st.write("Please enter a valid URL.")
+    if not groq_api_key:
+        st.write("Please enter your Groq API Key.")
+    if not website_url:
+        st.write("Please enter a valid URL.")
